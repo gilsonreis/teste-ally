@@ -18,20 +18,18 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework import routers
+
+from checkout.api import VendasViewSet
 from eventos.api import TeatroViewSet, ShowViewSet, IngressoViewSet
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'teatros', TeatroViewSet)
 router.register(r'shows', ShowViewSet)
 router.register(r'ingressos', IngressoViewSet)
-# router.register(r'teatros-disponiveis', TeatroDisponiveis, base_name="")
-# router.register(r'shows-e-ingressos-disponiveis', ShowIngressosDisponiveisViewSet, base_name="")
-
-# router.register(r'teatros-disponiveis', TeatroDisponiveis)
-# router.register(r'shows-e-ingressos-disponiveis/teatro/<id>', ShowsEIngressosDisponiveis.as_view({'get': 'list'}),
-#                 base_name="")
+router.register(r'vendas', VendasViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^chaining/', include('smart_selects.urls')),
     url(r'^api/', include(router.urls)),
 ]
