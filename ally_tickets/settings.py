@@ -16,7 +16,6 @@ from decouple import config, Csv
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default=[], cast=Csv())
-
 
 # Application definition
 
@@ -40,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'smart_selects',
+    'pagseguro',
+    'corsheaders',
 
     'core',
     'eventos',
@@ -52,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -77,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ally_tickets.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -91,7 +90,6 @@ DATABASES = {
         'PORT': config("PORT"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -111,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -125,7 +122,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -133,6 +129,21 @@ STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': config('PAGINATION_PAGE_SIZE', 10),
 }
 
+PAGSEGURO_EMAIL = config('PAGSEGURO_EMAIL')
+PAGSEGURO_TOKEN = config('PAGSEGURO_TOKEN')
+PAGSEGURO_SANDBOX = config('PAGSEGURO_SANDBOX')  # se o valor for True, as requisições a api serão feitas usando o PagSeguro Sandbox.
+PAGSEGURO_LOG_IN_MODEL = True  # se o valor for True, os checkouts e transações vão ser logadas no database. Deixar como True
+
+CORS_ORIGIN_ALLOW_ALL = True  # para desenvolvimento, todos os dominios são permitidos.
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]

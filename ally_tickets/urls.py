@@ -19,7 +19,7 @@ from django.urls import path, include
 
 from rest_framework import routers
 
-from checkout.api import VendasViewSet
+from checkout.api import VendasViewSet, CheckoutViewSet
 from eventos.api import TeatroViewSet, ShowViewSet, IngressoViewSet
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -27,9 +27,10 @@ router.register(r'teatros', TeatroViewSet)
 router.register(r'shows', ShowViewSet)
 router.register(r'ingressos', IngressoViewSet)
 router.register(r'vendas', VendasViewSet)
+router.register(r'checkout', CheckoutViewSet, base_name="checkout")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^chaining/', include('smart_selects.urls')),
     url(r'^api/', include(router.urls)),
+    url(r'^retorno/pagseguro/', include('pagseguro.urls')),
 ]
