@@ -1,1 +1,1 @@
-"web: gunicorn ally_tickets.wsgi --log-file -" 
+web: gunicorn ally_tickets.wsgi --log-file -
